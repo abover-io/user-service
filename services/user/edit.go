@@ -1,21 +1,15 @@
 package user
 
 import (
-	"errors"
-
-	"github.com/aboverio/user-service/models"
 	"github.com/aboverio/user-service/services"
 	"github.com/aboverio/user-service/validations"
 	"github.com/google/uuid"
 )
 
 func Edit(userId *uuid.UUID, payload *validations.EditUserPayload) error {
-	user := &models.User{
-		ID: *userId,
-	}
-
-	if err := services.DB.First(user).Error; err != nil {
-		return errors.New("user not found")
+	user, err := FindById(userId)
+	if err != nil {
+		return err
 	}
 
 	user.FirstName = payload.FirstName
